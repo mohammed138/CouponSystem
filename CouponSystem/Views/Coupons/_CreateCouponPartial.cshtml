@@ -5,37 +5,37 @@
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="Name">Coupon Name</label>
-        <input id="CouponName" name="Name" class="form-control" />
+        <input id="CouponName"required  name="Name" class="form-control" />
         <span class="text-danger" id="CouponNameError"></span>
     </div>
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="Code">Coupon Code</label>
-        <input id="CouponCode" name="Code" class="form-control" />
+        <input id="CouponCode" required name="Code" class="form-control" />
         <span class="text-danger" id="CouponCodeError"></span>
     </div>
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="Value">Coupon Value</label>
-        <input id="CouponValue" name="Value" type="number" class="form-control" />
+        <input id="CouponValue" required name="Value" type="number" class="form-control" />
         <span class="text-danger" id="CouponValueError"></span>
     </div>
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="MinimumOrderPrice">Minimum Order Price</label>
-        <input id="MinimumOrderPrice" name="MinimumOrderPrice" type="number" class="form-control" />
+        <input id="MinimumOrderPrice" required name="MinimumOrderPrice" type="number" class="form-control" />
         <span class="text-danger" id="MinimumOrderPriceError"></span>
     </div>
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="UseCount">Use Count</label>
-        <input id="UseCount" name="UseCount" type="number" class="form-control" />
+        <input id="UseCount" required name="UseCount" type="number" class="form-control" />
         <span class="text-danger" id="UseCountError"></span>
     </div>
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="CouponType">Coupon Type</label>
-        <select id="CouponType" name="Type" class="form-control">
+        <select id="CouponType" required name="Type" class="form-control">
             <option value="Discount">Discount</option>
             <option value="FreeShipping">Free Shipping</option>
         </select>
@@ -44,25 +44,25 @@
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="StartDate">Start Date</label>
-        <input id="StartDate" name="StartDate" type="date" class="form-control" />
+        <input id="StartDate" required name="StartDate" type="date" class="form-control" />
         <span class="text-danger" id="StartDateError"></span>
     </div>
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="EndDate">End Date</label>
-        <input id="EndDate" name="EndDate" type="date" class="form-control" />
+        <input id="EndDate" required name="EndDate" type="date" class="form-control" />
         <span class="text-danger" id="EndDateError"></span>
     </div>
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="FreeShipping">Free Shipping</label>
-        <input id="FreeShipping" name="FreeShipping" type="checkbox" class="form-check-input" />
+        <input id="FreeShipping" required name="FreeShipping" type="checkbox" class="form-check-input" />
         <span class="text-danger" id="FreeShippingError"></span>
     </div>
 
     <div class="form-group">
         <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="CODNotIncluded">COD Not Included</label>
-        <input id="CODNotIncluded" name="CODNotIncluded" type="checkbox" class="form-check-input" />
+        <input id="CODNotIncluded" required name="CODNotIncluded" type="checkbox" class="form-check-input" />
         <span class="text-danger" id="CODNotIncludedError"></span>
     </div>
 

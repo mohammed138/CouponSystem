@@ -11,10 +11,11 @@ namespace CouponSystem.Models.Dtos.CouponDto
 {
     public class CreateCouponDto
     {
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public string? Code { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
+
         public string? Name { get; set; }
          
         public List<CreateCouponUserDto>  CouponUsers { get; set; } 
@@ -22,39 +23,39 @@ namespace CouponSystem.Models.Dtos.CouponDto
 
 
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public List<Guid> SelectedProductIds { get; set; }  // List of selected product IDs
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public List<UserUsageDto> SelectedUsers { get; set; }  // List of users and their usage count
 
 
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public decimal MinimumOrderPrice { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public int UseCount { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public int Value { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public TypeCoupon Type { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public DateTime StartDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public DateTime EndDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public int NumberOfUsePerCustomer { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public bool FreeShipping { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = " this Field is required.")]
         public bool CODNotIncluded { get; set; }
     }
     public class UserUsageDto
