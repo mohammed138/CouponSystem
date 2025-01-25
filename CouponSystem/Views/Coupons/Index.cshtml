@@ -15,55 +15,61 @@
 
 <script>
     $(document).ready(function () {
-        function getAllCoupons() {
+        function getAllCoupons(page = 1) {
             $.ajax({
-                url: '/Coupons/GetAll',
+                url: `/Coupons/GetAll?page=${page}`,
                 type: 'GET',
                 success: function (result) {
-                    if (result.isSuccess) {
+                    if (result.isSuccess && result.data) {
                         let tableContent = '';
                         result.data.$values.forEach(function (coupon) {
                             tableContent += `
-                                    <tr class="hover:bg-gray-50 transition duration-300" style="height:50px">
-                                        <td class="border border-gray-300 px-4 py-2 text-gray-800">${coupon.name}</td>
-                                        <td class="border border-gray-300 px-4 py-2 text-gray-800">${coupon.code}</td>
-                                        <td class="border border-gray-300 px-4 py-2 text-gray-800">${coupon.value}</td>
-                                        <td class="border border-gray-300 px-4 py-2 text-gray-800">${new Date(coupon.startDate).toLocaleDateString()}</td>
-                                        <td class="border border-gray-300 px-4 py-2 text-gray-800">${new Date(coupon.endDate).toLocaleDateString()}</td>
-                                        <td class="border border-gray-300 px-4 py-2 text-center">
-                                            <a href="javascript:void(0);" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="showDetails('${coupon.id}')">
-                                                <i class="fas fa-eye mr-2"></i> Show Details
-                                            </a>
-                                            |
-                                            <a href="javascript:void(0);" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="editCoupon('${coupon.id}')">
-                                                <i class="fas fa-edit mr-2"></i> Edit
-                                            </a>
-                                            |
-                                            <a href="javascript:void(0);" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="deleteCoupon('${coupon.id}')">
-                                                <i class="fas fa-trash-alt mr-2"></i> Delete
-                                            </a>
-                                        </td>
-                                    </tr>
-                                `;
+                                <tr class="hover:bg-gray-50 transition duration-300" style="height:50px">
+                                    <td class="border border-gray-300 px-4 py-2 text-gray-800">${coupon.name}</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-gray-800">${coupon.code}</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-gray-800">${coupon.value}</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-gray-800">${new Date(coupon.startDate).toLocaleDateString()}</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-gray-800">${new Date(coupon.endDate).toLocaleDateString()}</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="javascript:void(0);" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="showDetails('${coupon.id}')">
+                                            <i class="fas fa-eye mr-2"></i> Show Details
+                                        </a>
+                                        |
+                                        <a href="javascript:void(0);" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="editCoupon('${coupon.id}')">
+                                            <i class="fas fa-edit mr-2"></i> Edit
+                                        </a>
+                                        |
+                                        <a href="javascript:void(0);" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="deleteCoupon('${coupon.id}')">
+                                            <i class="fas fa-trash-alt mr-2"></i> Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            `;
                         });
 
+                        const currentPage = result.data.meta ? result.data.meta.current_page : 1;
+                        const lastPage = result.data.meta ? result.data.meta.last_page : 1;
+
                         $('#couponTableContainer').html(`
-                                <table class="w-full table-auto">
-                                    <thead>
-                                        <tr class="bg-gray-100">
-                                            <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Name</th>
-                                            <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Code</th>
-                                            <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Value</th>
-                                            <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Start Date</th>
-                                            <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">End Date</th>
-                                            <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${tableContent}
-                                    </tbody>
-                                </table>
-                            `);
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Name</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Code</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Value</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Start Date</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">End Date</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${tableContent}
+                                </tbody>
+                            </table>
+                            <div class="mt-4 flex justify-center">
+                                ${pagination(currentPage, lastPage)}
+                            </div>
+                        `);
                     } else {
                         alert(result.message);
                     }
@@ -74,8 +80,17 @@
             });
         }
 
+        function pagination(currentPage, totalPages) {
+            let paginationHtml = '';
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHtml += `<button class="mx-1 px-3 py-1 rounded-lg ${i === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-300'}" onclick="getAllCoupons(${i})">${i}</button>`;
+            }
+            return paginationHtml;
+        }
+
         getAllCoupons();
     });
+
 
     function showDetails(id) {
         $.ajax({

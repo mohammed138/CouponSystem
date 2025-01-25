@@ -1,4 +1,5 @@
 ﻿using CouponSystem.DataAccess.Data;
+using CouponSystem.Models.Dtos.Helpers;
 using CouponSystem.Models.Dtos.ProductDto;
 using CouponSystem.Models.Entities;
 using CouponSystem.Models.ViewModels;
@@ -16,7 +17,7 @@ namespace CouponSystem.Services.Services
 
     public interface IProductService
     {
-        Task<List<ProductViewModel>> GetAll(int pageIndex, int pageSize);
+        Task<ResponsDataByPage<List<ProductViewModel>>> GetAll(int pageIndex, int pageSize);
         Task<ProductViewModel> Get(Guid id);
         Task<ProductViewModel> Create(CreateProductDto dto);
         Task<ProductViewModel> Update(UpdateProductDto dto , Guid id);
@@ -31,35 +32,43 @@ namespace CouponSystem.Services.Services
         {
             this._context = _context;
         }
-        public async Task<List<ProductViewModel>> GetAll(int pageIndex, int pageSize)
-        {
-            if (pageIndex <= 0 || pageSize <= 0)
-                throw new ArgumentException("Page index and size must be greater than zero.");
 
-            try
+        public async Task<ResponsDataByPage<List<ProductViewModel>>> GetAll(int page = 1, int pageSize = 10)
+        {
+            var totalProducts = await _context.Products.CountAsync();
+            var products = await _context.Products.AsNoTracking()
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(product => new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Price = product.Price,
+                    Quantity = product.Quantity,
+                    HashCode = product.HashCode,
+                    SKU = product.SKU,
+                    InStock = product.InStock,
+                    Height = product.Height,
+                    Width = product.Width,
+                    Length = product.Length,
+                    Weight = product.Weight,
+                })
+                .ToListAsync();
+
+            var paginationMeta = new Pagination
             {
-                return await _context.Products.AsNoTracking()
-                    .Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize)
-                    .Select(product => new ProductViewModel
-                    {
-                        Id = product.Id,
-                        Name = product.Name,
-                        Price = product.Price,
-                        Quantity = product.Quantity,
-                        HashCode = product.HashCode,
-                        SKU = product.SKU,
-                        InStock = product.InStock,
-                        Height = product.Height,
-                        Width = product.Width,
-                        Length = product.Length,
-                        Weight = product.Weight,
-                    }).ToListAsync();
-            }
-            catch (Exception ex)
+                current_page = page,
+                per_page = pageSize,
+                total = totalProducts,
+                last_page = (int)Math.Ceiling((double)totalProducts / pageSize)
+            };
+
+            return new ResponsDataByPage<List<ProductViewModel>>
             {
-                throw new Exception("An error occurred while retrieving products.");
-            }
+                IsSuccess = true,
+                Data = products,
+                meta = paginationMeta
+            };
         }
         public async Task<ProductViewModel> Get(Guid productId)
         {

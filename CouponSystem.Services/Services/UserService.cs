@@ -15,7 +15,7 @@ namespace CouponSystem.Services.Services
    
     public interface IUserService
     {
-        Task<ResponseData<List<UserViewModel>>> GetAll();
+        Task<ResponsDataByPage<List<UserViewModel>>> GetAll(int page = 1, int pageSize = 10);
         Task<ResponseData<UserViewModel>> Get(string id);
         Task<ResponseData<UserViewModel>> Create(CreateUserDto dto);
         Task<ResponseData<UserViewModel>> Update(UpdateUserDto dto, string userId);
@@ -33,15 +33,34 @@ namespace CouponSystem.Services.Services
             _context = context;
         }
 
-        public async Task<ResponseData<List<UserViewModel>>> GetAll()
+        public async Task<ResponsDataByPage<List<UserViewModel>>> GetAll(int page = 1, int pageSize = 10)
         {
-            var users = await _context.Users.Select(user => new UserViewModel
+            var totalUsers = await _context.Users.CountAsync();
+            var users = await _context.Users
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(user => new UserViewModel
+                {
+                    Id = user.Id,
+                    EmailAddress = user.Email,
+                    FullName = user.FullName
+                })
+                .ToListAsync();
+
+            var paginationMeta = new Pagination
             {
-                Id = user.Id,
-                EmailAddress = user.Email,
-                FullName = user.FullName
-            }).ToListAsync();
-            return new ResponseData<List<UserViewModel>> { Data = users };
+                current_page = page,
+                per_page = pageSize,
+                total = totalUsers,
+                last_page = (int)Math.Ceiling((double)totalUsers / pageSize)
+            };
+
+            return new ResponsDataByPage<List<UserViewModel>>
+            {
+                IsSuccess = true,
+                Data = users,
+                meta = paginationMeta
+            };
         }
 
         public async Task<ResponseData<UserViewModel>> Get(string userId)

@@ -42,9 +42,11 @@ namespace CouponSystem.Services.Services
                     IsSuccess = false,
                     Message = "Page index and size must be greater than zero."
                 };
+
             try
             {
-                var res =  await _context.Coupons.AsNoTracking()
+                var totalCoupons = await _context.Coupons.CountAsync();
+                var coupons = await _context.Coupons.AsNoTracking()
                     .Include(c => c.CouponUsers)
                     .Include(c => c.CouponProducts)
                     .Skip((pageIndex - 1) * pageSize)
@@ -65,23 +67,32 @@ namespace CouponSystem.Services.Services
                         CouponUsers = coupon.CouponUsers.Select(cu => new CouponUserViewModel
                         {
                             UserId = cu.UserId,
-                            EmailAddress =cu.User.Email,
-                            FullName =cu.User.FullName,
+                            EmailAddress = cu.User.Email,
+                            FullName = cu.User.FullName,
                             Usage = cu.Usage
                         }).ToList(),
                         CouponProducts = coupon.CouponProducts.Select(cp => new CouponProductViewModel
                         {
                             Id = cp.ProductId,
-                            Name =cp.Product.Name,
+                            Name = cp.Product.Name,
                         }).ToList()
                     })
                     .ToListAsync();
 
+                var paginationMeta = new Pagination
+                {
+                    current_page = pageIndex,
+                    per_page = pageSize,
+                    total = totalCoupons,
+                    last_page = (int)Math.Ceiling((double)totalCoupons / pageSize)
+                };
+
                 return new ResponsDataByPage<object>
                 {
-                    IsSuccess =true , 
-                    Message = "Coupon Fetched Successfully ",
-                    Data = res ,
+                    IsSuccess = true,
+                    Message = "Coupon Fetched Successfully",
+                    Data = coupons,
+                    meta = paginationMeta
                 };
             }
             catch (Exception ex)
