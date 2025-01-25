@@ -1,0 +1,80 @@
+﻿@model CouponSystem.Models.Dtos.UserDto.CreateUserDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h3 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-3xl dark:text-white">Create new User</h3>
+<br />
+<form id="createForm" asp-action="Create" method="post">
+
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" asp-for="FullName"> Full Name</label>
+        <input asp-for="FullName"  class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500"  asp-for="Email">  Email </label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500"  asp-for="Password">Password </label>
+        <input asp-for="Password" type="password"  class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <br />
+    <br />
+
+    <button type="submit" class="btn btn-success">Create </button>
+</form>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script>
+    $("#createForm").submit(function (e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Create", "Users")",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        $('#modelModal').modal('hide');
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An unexpected error occurred.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+</script>

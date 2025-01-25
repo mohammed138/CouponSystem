@@ -1,0 +1,150 @@
+﻿
+ <h3 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-3xl dark:text-white">  Edit Product  </h3>
+<br />
+
+<form id="editForm" method="post">
+
+    <div class="form-group">
+        <label for="Name">Product Name</label>
+        <input name="Name" required class="form-control" />
+        <span for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Price">Product Price</label>
+        <input name="Price" required class="form-control" />
+        <span for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Quantity">Product Quantity</label>
+        <input name="Quantity" required class="form-control" />
+        <span for="Quantity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="SKU">Product SKU</label>
+        <input name="SKU" class="form-control" />
+        <span for="SKU" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="HashCode">Product HashCode</label>
+        <input name="HashCode" class="form-control" />
+        <span for="HashCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="InStock">Product Status</label>
+        <select name="InStock" required class="form-control">
+            <option value="true">In Stock</option>
+            <option value="false">Out of Stock</option>
+        </select>
+        <span for="InStock" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Weight">Product Weight</label>
+        <input name="Weight" required class="form-control" />
+        <span for="Weight" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Width">Product Width</label>
+        <input name="Width" required class="form-control" />
+        <span for="Width" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Length">Product Length</label>
+        <input name="Length" required class="form-control" />
+        <span for="Length" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Height">Product Height</label>
+        <input name="Height" required class="form-control" />
+        <span for="Height" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success"> Save </button>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script>
+    $(document).ready(function () {
+
+        var id = '@ViewBag.id';
+
+        $.ajax({
+            url: '/Products/GetDetails/' + id,
+            type: 'GET',
+            success: function (result) {
+                $('input[name="Name"]').val(result.name);
+                $('input[name="Price"]').val(result.price);
+                $('input[name="Quantity"]').val(result.quantity);
+                $('input[name="SKU"]').val(result.sku);
+                $('input[name="HashCode"]').val(result.hashCode);
+                $('select[name="InStock"]').val(result.inStock.toString());
+                $('input[name="Weight"]').val(result.weight);
+                $('input[name="Width"]').val(result.width);
+                $('input[name="Length"]').val(result.length);
+                $('input[name="Height"]').val(result.height);
+            },
+            error: function () {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while fetching product details.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
+        $("#editForm").submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                type: "PUT", // Change to PUT
+                url: '@Url.Action("Edit", "Products")?id=' + '@ViewBag.id',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            $('#modelModal').modal('hide');
+                        });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: xhr.responseText || 'An unexpected error occurred.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+
+
+     });
+ 
+    </script>

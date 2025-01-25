@@ -1,0 +1,159 @@
+﻿@{
+    ViewData["Title"] = "Product List";
+}
+
+<div class="text-center my-10">
+    <h1 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-6xl ">
+        This page displays all products in the system and allowed actions.
+    </h1>
+</div>
+
+<div id="Create" class="my-5 flex justify-start">
+    <a href="javascript:void(0);" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="createProduct()">
+        <i class="fas fa-plus-circle mr-2"></i> Add new Product
+    </a>
+</div>
+
+<div id="productTableContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    function getAllProducts() {
+        $.ajax({
+            url: '/Products/GetAll',
+            type: 'GET',
+            success: function (result) {
+                if (result.$values) {
+                    let tableContent = '';
+                    result.$values.forEach(function (product) {
+                        tableContent += `
+                            <tr class="hover:bg-gray-50 transition duration-300" style="height:50px">
+                                <td class="border border-gray-300 px-4 py-2 text-gray-800">${product.name || 'N/A'}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-gray-800">${product.price !== null ? product.price.toFixed(2) : 'N/A'}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-gray-800">${product.quantity || 'N/A'}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-gray-800">${product.inStock ? 'Yes' : 'No'}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                    <a href="javascript:void(0);" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="showDetails('${product.id}')">
+                                        <i class="fas fa-eye mr-2"></i> Show Details
+                                    </a>
+                                    |
+                                    <a href="javascript:void(0);" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="editProduct('${product.id}')">
+                                        <i class="fas fa-edit mr-2"></i> Edit
+                                    </a>
+                                    |
+                                    <a href="javascript:void(0);" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300" onclick="deleteProduct('${product.id}')">
+                                        <i class="fas fa-trash-alt mr-2"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    $('#productTableContainer').html(`
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Name</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Price</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Quantity</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">In Stock</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-gray-600 font-semibold text-left">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableContent}
+                            </tbody>
+                        </table>
+                    `);
+                } else {
+                    alert('Failed to load products.');
+                }
+            },
+            error: function () {
+                alert('An error occurred while fetching products.');
+            }
+        });
+    }
+
+
+    function showDetails(id) {
+        $.ajax({
+            url: '/Products/GetDetails/' + id,
+            type: 'GET',
+            success: function (result) {
+                    let modalContent = `
+                                    <p>name: ${result.name}</p>
+                                    <p>price: ${result.price}</p>
+                                                <p>quantity: ${result.quantity}</p>
+                                            <p>inStock: ${result.inStock}</p>
+                        `;
+                    $('#modelModal .modal-body').html(modalContent);
+                    $('#modelModal').removeClass('hidden');
+
+             
+            },
+            error: function () {
+                alert('An error occurred while fetching product details.');
+            }
+        });
+    }
+
+    function editProduct(id) {
+        $.ajax({
+            url: '/Products/Edit/' + id,
+            type: 'GET',
+            success: function (result) {
+                $('#modelModal .modal-body').html(result);
+                $('#modelModal').removeClass('hidden');
+            },
+            error: function () {
+                alert('An error occurred while fetching product edit form.');
+            }
+        });
+    }
+
+    function deleteProduct(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Products/Delete/' + id,
+                    type: 'POST',
+                    success: function () {
+                        Swal.fire('Deleted!', 'Product has been deleted.', 'success');
+                        getAllProducts();
+                    },
+                    error: function () {
+                        alert('An error occurred while deleting the product.');
+                    }
+                });
+            }
+        });
+    }
+
+    function createProduct() {
+        $.ajax({
+            url: '/Products/Create',
+            type: 'GET',
+            success: function (result) {
+                $('#modelModal .modal-body').html(result);
+                $('#modelModal').removeClass('hidden');
+            },
+            error: function () {
+                alert('An error occurred while loading the create product form.');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        getAllProducts();
+    });
+</script>

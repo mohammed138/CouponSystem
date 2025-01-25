@@ -1,0 +1,17 @@
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\bin\Debug\net7.0\CouponSystem.Services.deps.json
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\bin\Debug\net7.0\CouponSystem.Services.dll
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\bin\Debug\net7.0\CouponSystem.Services.pdb
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\bin\Debug\net7.0\CouponSystem.DataAccess.dll
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\bin\Debug\net7.0\CouponSystem.Models.dll
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\bin\Debug\net7.0\CouponSystem.DataAccess.pdb
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\bin\Debug\net7.0\CouponSystem.Models.pdb
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\CouponSystem.Services.csproj.AssemblyReference.cache
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\CouponSystem.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\CouponSystem.Services.AssemblyInfoInputs.cache
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\CouponSystem.Services.AssemblyInfo.cs
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\CouponSystem.Services.csproj.CoreCompileInputs.cache
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\CouponSystem.Services.csproj.CopyComplete
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\CouponSystem.Services.dll
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\refint\CouponSystem.Services.dll
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\CouponSystem.Services.pdb
+C:\Users\lubba\source\repos\CouponSystem\CouponSystem.Services\obj\Debug\net7.0\ref\CouponSystem.Services.dll

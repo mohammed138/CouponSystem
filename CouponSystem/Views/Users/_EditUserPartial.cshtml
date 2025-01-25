@@ -1,0 +1,101 @@
+﻿
+ <h3 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-3xl dark:text-white">Edit  User</h3>
+
+<form id="editForm" method="post">
+    <input type="hidden" name="Id" />
+
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="FullName"> Full Name</label>
+        <input id="FullName" name="FullName" class="form-control" />
+        <span for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="Email">  Email </label>
+        <input id="Email" name="Email" class="form-control" />
+        <span for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500"  for="Password">Password </label>
+        <input id="Password" name="Password" type="password" class="form-control" />
+        <span for="Password" class="text-danger"></span>
+    </div>
+    <br />
+    <br />
+
+    <button type="submit" class="btn btn-success">Update </button>
+</form>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script>
+    $(document).ready(function () {
+        getUserDetails();
+
+        $("#editForm").submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                type: "POST", 
+                url: '@Url.Action("Edit", "Users")?id=' + '@ViewBag.id',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            $('#modelModal').modal('hide');
+                        });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: xhr.responseText || 'An unexpected error occurred.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+
+         function getUserDetails() {
+            $.ajax({
+                url: '/Users/GetDetails/' + '@ViewBag.id',
+                type: 'GET',
+                success: function (result) {
+                    $('input[name="Id"]').val(result.data.id);
+                    $('input[name="FullName"]').val(result.data.fullName);
+                    $('input[name="Email"]').val(result.data.emailAddress);
+
+                },
+                error: function () {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while fetching product details.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    });
+</script>

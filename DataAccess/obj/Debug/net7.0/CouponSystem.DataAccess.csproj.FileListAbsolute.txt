@@ -1,0 +1,15 @@
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\bin\Debug\net7.0\CouponSystem.DataAccess.deps.json
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\bin\Debug\net7.0\CouponSystem.DataAccess.dll
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\bin\Debug\net7.0\CouponSystem.DataAccess.pdb
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\bin\Debug\net7.0\CouponSystem.Models.dll
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\bin\Debug\net7.0\CouponSystem.Models.pdb
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\CouponSystem.DataAccess.csproj.AssemblyReference.cache
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\CouponSystem.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\CouponSystem.DataAccess.AssemblyInfoInputs.cache
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\CouponSystem.DataAccess.AssemblyInfo.cs
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\CouponSystem.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\CouponSystem.DataAccess.csproj.CopyComplete
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\CouponSystem.DataAccess.dll
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\refint\CouponSystem.DataAccess.dll
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\CouponSystem.DataAccess.pdb
+C:\Users\lubba\source\repos\CouponSystem\DataAccess\obj\Debug\net7.0\ref\CouponSystem.DataAccess.dll

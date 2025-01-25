@@ -1,0 +1,207 @@
+﻿
+<h3 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-700 md:text-5xl lg:text-3xl dark:text-white">Edit Coupon</h3>
+<br />
+<form id="editForm" method="post">
+    <input id="Id" name="Id" type="hidden" class="form-control" />
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="Name">Coupon Name</label>
+        <input id="CouponName" name="CouponName" class="form-control" />
+        <span class="text-danger" id="CouponNameError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="Code">Coupon Code</label>
+        <input id="CouponCode" name="CouponCode" class="form-control" />
+        <span class="text-danger" id="CouponCodeError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="Value">Coupon Value</label>
+        <input id="CouponValue" name="CouponValue" type="number" class="form-control" />
+        <span class="text-danger" id="CouponValueError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="MinimumOrderPrice">Minimum Order Price</label>
+        <input id="MinimumOrderPrice" name="MinimumOrderPrice" type="number" class="form-control" />
+        <span class="text-danger" id="MinimumOrderPriceError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="UseCount">Use Count</label>
+        <input id="UseCount" name="UseCount" type="number" class="form-control" />
+        <span class="text-danger" id="UseCountError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="CouponType">Coupon Type</label>
+        <select id="CouponType" name="CouponType" class="form-control">
+            <option value="Discount">Discount</option>
+            <option value="FreeShipping">Free Shipping</option>
+        </select>
+        <span class="text-danger" id="CouponTypeError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="StartDate">Start Date</label>
+        <input id="StartDate" name="StartDate" type="date" class="form-control" />
+        <span class="text-danger" id="StartDateError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="EndDate">End Date</label>
+        <input id="EndDate" name="EndDate" type="date" class="form-control" />
+        <span class="text-danger" id="EndDateError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="FreeShipping">Free Shipping</label>
+        <input id="FreeShipping" name="FreeShipping" type="checkbox" class="form-check-input" />
+        <span class="text-danger" id="FreeShippingError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="CODNotIncluded">COD Not Included</label>
+        <input id="CODNotIncluded" name="CODNotIncluded" type="checkbox" class="form-check-input" />
+        <span class="text-danger" id="CODNotIncludedError"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="userRecords">Coupon Users</label>
+        <div id="userRecordsContainer"></div>
+        <button type="button" id="addNewUserBtn">Add New User</button>
+    </div>
+
+    <div class="form-group">
+        <label class="mb-2 text-1xl font-extrabold leading-none tracking-tight text-gray-500" for="products">Coupon Products</label>
+        <select id="products" name="SelectedProductIds" multiple="multiple" class="selectpicker" data-live-search="true"></select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var couponId = '@Html.Raw(Json.Serialize(ViewBag.CouponId))'.replace(/"/g, '');
+        const usersData = @Html.Raw(Json.Serialize(ViewBag.CouponUsers));
+        const productsData = @Html.Raw(Json.Serialize(ViewBag.CouponProducts));
+
+        const usersArray = usersData && usersData.$values ? usersData.$values : [];
+        const CouponproductsArray = productsData && productsData.$values ? productsData.$values : [];
+
+        $.ajax({
+            url: '/Coupons/GetDetails/' + couponId,
+            type: 'GET',
+            success: function (response) {
+                if (response.isSuccess) {
+
+                    const setInputValue = (selector, value) => {
+                        $(selector).val(value || '');
+                    };
+                    setInputValue('#Id', response.data.id);
+                    setInputValue('#CouponName', response.data.name);
+                    setInputValue('#CouponCode', response.data.code);
+                    setInputValue('#CouponValue', response.data.value);
+                    setInputValue('#MinimumOrderPrice', response.data.minimumOrderPrice);
+                    setInputValue('#UseCount', response.data.useCount);
+                    setInputValue('#StartDate', response.data.startDate?.split('T')[0]);
+                    setInputValue('#EndDate', response.data.endDate?.split('T')[0]);
+                    $('#FreeShipping').prop('checked', response.data.freeShipping ?? false);
+                    $('#CODNotIncluded').prop('checked', response.data.codNotIncluded ?? false);
+
+                    // Handle products
+                    const selectedProductIds = response.data.couponProducts?.$values?.map(product => product.productId) || [];
+
+                    // First, clear the select options
+                    $('#products').empty();
+
+                    // Then, append the options
+                    CouponproductsArray.forEach(item => {
+                        const option = $('<option></option>')
+                            .attr('value', item.id)
+                            .text(item.name || 'No Name')
+                            .prop('selected', selectedProductIds.includes(item.id)); // Mark selected products
+                        $('#products').append(option);
+                    });
+
+                    // Initialize select2 after appending options
+                    $('#products').select2();
+                } else {
+                    Swal.fire('Error!', response.Message, 'error');
+                }
+            },
+            error: function () {
+                Swal.fire('Error!', 'An unexpected error occurred.', 'error');
+            }
+        });
+         function generateUserRecord(index, userId = '', usage = 0) {
+            return `
+                    <div class="user-record">
+                        <label for="UserId">User:</label>
+                        <select class="user-select form-control" name="CouponUsers[${index}].UserId">
+                            <option value="">Select a User</option>
+                            ${usersArray.map(user => `
+                                <option value="${user.userId}" ${user.userId === userId ? 'selected' : ''}>
+                                    ${user.fullName}
+                                </option>
+                            `).join('')}
+                        </select>
+                        <label for="UseCount">Use Count:</label>
+                        <input type="number" name="CouponUsers[${index}].UseCount" value="${usage}" min="1" class="form-control" />
+                        <button type="button" class="removeUserBtn btn btn-danger">Remove</button>
+                    </div>`;
+        }
+
+        // Add new user record
+        $('#addNewUserBtn').click(function () {
+            $('#userRecordsContainer').append(generateUserRecord($('#userRecordsContainer').children().length));
+        });
+
+        // Remove user record
+        $('#userRecordsContainer').on('click', '.removeUserBtn', function () {
+            $(this).closest('.user-record').remove();
+        });
+
+        $('#editForm').submit(function (e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();  // Serialize the form elements
+            console.log(formData);  
+
+            $.ajax({
+                url: '@Url.Action("Edit", "Coupons")?id=' + '@ViewBag.id',
+                type: 'POST',
+                data: formData,
+                processData: false,  // Don't let jQuery process the data
+                contentType: false,  // Let the browser set the content type
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire('Success!', 'Coupon updated successfully', 'success');
+                    } else {
+                        Swal.fire('Error!', response.message, 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error!', 'An unexpected error occurred.', 'error');
+                }
+            });
+        });
+    });
+</script>
+  <script>
+    $('#products').select2();
+    $('#products option').each(function () {
+        if (selectedProductIds.includes($(this).val())) {
+            $(this).prop('selected', true);
+        }
+    });
+ </script>
+
+
+
+ 
